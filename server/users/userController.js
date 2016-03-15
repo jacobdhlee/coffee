@@ -5,31 +5,31 @@ module.exports = {
 
   signup: function(req, res, next) {
     var user = new User();
-    var username = req.body.username;
-    var password = req.body.password;
-
+    user.username = req.body.username;
+    user.password = req.body.password;
+    console.log('username going to be ', req.body.username)
     User.findOne({username: req.body.username}, function(err, existed) {
       if(existed) {
         console.log(req.body.username + ' has already sign up')
-        return res.redirect('/signin')
+        //return res.redirect('/signin')
       } else {
         user.save(function(err, user) {
           if(err) {
             next(err);
           } else {
             res.json("user has been created. Please sign in again")
-            return res.redirect('/signin')
+            //return res.redirect('/signin')
           }
         })
       }
     })
   },
 
-  singin: function(req, res, next) {
-    var username = req.body.username;
+  signin: function(req, res, next) {
     var password = req.body.password;
 
-    User.findOne({username: username}, function(err, user) {
+    User.findOne({username: req.body.username}, function(err, user) {
+      console.log("username^^^^^^^^^", req.body.username)
       if(err) {
         return next(err);
       } else {
@@ -40,7 +40,7 @@ module.exports = {
           res.json('Password is not match. Please check password')
         } 
         res.json('successfully login')
-        return res.redirect('/');
+        //return res.redirect('/');
       }
     })
   }

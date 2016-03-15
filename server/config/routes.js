@@ -1,6 +1,6 @@
-var userController = require('../users/usersController.js');
+var userController = require('../users/userController.js');
 
 module.exports = function(app, express){
-  app.get('/signin', userController.singin);
-  app.post('/signup', userController.singup);
+  app.post('/signin', userController.signin);
+  app.post('/signup', userController.signup);
 }

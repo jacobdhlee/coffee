@@ -5,9 +5,7 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 //bodyParser object exposes various factories to create middleware, 
 //and will populate the req.body property with the parsed body or an empty object({})
-var ejs = require('ejs');
-var engine = require('ejs-mate');
-
+var routes = require('./config/routes.js');
 var User = require('./users/userModel.js');
 var app = express();
 
@@ -30,8 +28,7 @@ app.use(express.static(__dirname + '/../client'));
 //express no depends on connect with exception of express.static. this function is based on server-static 
 //and is responsible for serving static asset such as HTML, images and ETC..
 //express.static(root, (option) ) -> root is root directory from which to serve statuc assets
-app.engine('ejs', engine);
-app.set('view engine', 'ejs')
+routes(app, express);
 
 // checked post work through postman and mongodb
 // app.post('/adduser', function(req, res, next) {
