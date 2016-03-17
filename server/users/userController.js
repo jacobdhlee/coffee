@@ -29,7 +29,7 @@ module.exports = {
     var password = req.body.password;
 
     User.findOne({username: req.body.username}, function(err, user) {
-      console.log("username^^^^^^^^^", req.body.username)
+      console.log("username >>>>>>", req.body.username)
       if(err) {
         return next(err);
       } else {
