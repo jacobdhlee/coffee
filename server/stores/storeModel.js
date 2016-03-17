@@ -49,7 +49,7 @@ var StoreSchema = new Schema({
   like: {
     type: Number
   },
-})
+});
 
 StoreSchema.pre('save', function(next){
   var store = this;
