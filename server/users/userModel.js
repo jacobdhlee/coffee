@@ -92,7 +92,7 @@ UserSchema.methods.comparedPassword = function(password) {
   var savedPassword = this.password;
   //return bcrypt.compareSync(password, this.password);
   //compare(data, encrpted data, cb)
-  return new Promise(function(reslove, reject){
+  return new Promise(function(resolve, reject){
     bcrypt.compare(password, savedPassword, function( err, isMatch ) {
       if (err) {
         reject(err);

@@ -25,11 +25,9 @@ var StoreSchema = new Schema({
   profile: {
     name: {
       type: String,
-      required: true,
     },
     address: {
       type: String,
-      required: true,
     },
     phone_number: {
       type: Number,
@@ -42,7 +40,6 @@ var StoreSchema = new Schema({
     },
     govID: {
       type: String,
-      required: true,
     }
   },
 
@@ -53,7 +50,7 @@ var StoreSchema = new Schema({
 
 StoreSchema.pre('save', function(next){
   var store = this;
-  if(store.isModified('password')) {
+  if( !store.isModified('password') ) {
     return next();
   }
   bcrypt.genSalt(10, function(err, salt) {
@@ -73,7 +70,7 @@ StoreSchema.pre('save', function(next){
 
 StoreSchema.methods.comparedPassword = function(password) {
   var savedPassword = this.password;
-  return new Promise(function(reslove, reject){
+  return new Promise(function(resolve, reject){
     bcrypt.compare(password, savedPassword, function( err, isMatch ) {
       if (err) {
         reject(err);

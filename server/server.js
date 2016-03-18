@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 //and will populate the req.body property with the parsed body or an empty object({})
 var routes = require('./config/routes.js');
 var User = require('./users/userModel.js');
+var Store = require('./stores/storeModel.js');
 var app = express();
 
 mongoose.connect('mongodb://localhost:27017/coffee', function(err) {
