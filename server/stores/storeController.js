@@ -34,11 +34,14 @@ module.exports = {
         if(!store) {
           res.json('username is not match. Please sign up first')
         } 
-        if(!store.comparedPassword(password)) {
-          res.json('Password is not match. Please check password')
-        } 
-        res.json('successfully login')
-        //return res.redirect('/');
+        store.comparedPassword(password)
+            .then(function() {
+              res.json('successfully login')            
+            })
+            .catch(function(err){
+              console.error(err);
+              res.json('Password is not match. Please check password')
+            })
       }
     })
   }
