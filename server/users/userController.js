@@ -1,5 +1,20 @@
 var User = require('./userModel.js');
 var Promise = require("bluebird");
+var jwt = require('jwt-simple');
+var auth = require('../auth.js');
+var passport = require('passport');
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+
+var userToken = function(user) {
+  var timestamp = new Date().getTime();
+  return jwt.encode({ sub: user.id, iat: timestamp }, auth.secret);
+};
+
+var jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+  secretOrKey: auth.secret
+};
 
 module.exports = {
 
@@ -11,14 +26,12 @@ module.exports = {
     User.findOne({username: req.body.username}, function(err, existed) {
       if(existed) {
         console.log(req.body.username + ' has already sign up')
-        //return res.redirect('/signin')
       } else {
         user.save(function(err, user) {
           if(err) {
             next(err);
           } else {
-            res.json("user has been created. Please sign in again")
-            //return res.redirect('/signin')
+            res.json({token: userToken(user)})
           }
         })
       }
@@ -26,9 +39,10 @@ module.exports = {
   },
 
   signin: function(req, res, next) {
+    var username = req.body.username;
     var password = req.body.password;
 
-    User.findOne({username: req.body.username}, function(err, user) {
+    User.findOne({username: username}, function(err, user) {
       console.log("username >>>>>>", req.body.username)
       if(err) {
         return next(err);
@@ -36,9 +50,13 @@ module.exports = {
         if(!user) {
           res.json('username is not match. Please sign up first')
         }
-      user.comparedPassword(password)
-          .then(function() {
-            res.json('successfully login')            
+      return user.comparedPassword(password)
+          .then(function(foundUser) {
+            if(foundUser) {
+              res.json({token: userToken(user)})            
+            } else {
+              res.json('No user')
+            }
           })
           .catch(function(err){
             console.error(err);
@@ -46,5 +64,20 @@ module.exports = {
           })
       }
     })
+  },
+
+  jwtLogin: function() {
+    return new JwtStrategy(jwtOptions, function(payload, done){
+      User.findById(payload.sub, function(err, user){
+        if( err ) {
+          return done(err, false);
+        }
+        if( user ) {
+          done(null, user);
+        } else {
+          done(null, false);
+        }
+      })
+    })    
   }
 }
