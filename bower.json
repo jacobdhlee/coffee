@@ -1,0 +1,24 @@
+{
+  "name": "coffee",
+  "homepage": "https://github.com/jacobdhlee/coffee",
+  "authors": [
+    "Donghee Lee <jacobdhlee@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.3",
+    "angular-route": "^1.5.3",
+    "angular-mocks": "^1.5.3"
+  }
+}
